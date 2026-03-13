@@ -11,6 +11,14 @@
     "sharding"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EmanueleMinotto/playwright-scheduler-plugin"
+  },
+  "homepage": "https://github.com/EmanueleMinotto/playwright-scheduler-plugin#readme",
+  "bugs": {
+    "url": "https://github.com/EmanueleMinotto/playwright-scheduler-plugin/issues"
+  },
   "type": "module",
   "main": "./dist/index.cjs",
   "types": "./dist/index.d.ts",
