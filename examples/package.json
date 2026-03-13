@@ -1,0 +1,18 @@
+{
+  "name": "playwright-scheduler-plugin-example",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:shard1": "cross-env PLAYWRIGHT_SCHEDULER_SHARD=1/3 playwright test",
+    "test:shard2": "cross-env PLAYWRIGHT_SCHEDULER_SHARD=2/3 playwright test",
+    "test:shard3": "cross-env PLAYWRIGHT_SCHEDULER_SHARD=3/3 playwright test"
+  },
+  "dependencies": {
+    "playwright-scheduler-plugin": "file:.."
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.50.0",
+    "cross-env": "^7.0.3"
+  }
+}

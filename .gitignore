@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Test results
+test-results/
+playwright-report/
+
+# Playwright scheduler timing data (persist via CI cache/artifact, not git)
+.playwright-scheduler/
+
+# Misc
+.DS_Store
+*.log
