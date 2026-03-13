@@ -34,6 +34,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: ci
 
+    strategy:
+      matrix:
+        shard: ['1/2', '2/2']
+
     steps:
       - uses: actions/checkout@v4
 
@@ -58,16 +62,11 @@ jobs:
         uses: actions/cache@v4
         with:
           path: examples/.playwright-scheduler
-          key: playwright-scheduler-${{ github.ref }}
-          restore-keys: playwright-scheduler-
+          key: playwright-scheduler-${{ github.ref }}-${{ github.run_id }}-${{ matrix.shard }}
+          restore-keys: playwright-scheduler-${{ github.ref }}-
 
-      - name: Run example tests
+      - name: Run shard ${{ matrix.shard }}
         run: npx playwright test
         working-directory: examples
-
-      - name: Save timing data
-        uses: actions/cache/save@v4
-        if: always()
-        with:
-          path: examples/.playwright-scheduler
-          key: playwright-scheduler-${{ github.ref }}-${{ github.run_id }}
+        env:
+          PLAYWRIGHT_SCHEDULER_SHARD: ${{ matrix.shard }}
