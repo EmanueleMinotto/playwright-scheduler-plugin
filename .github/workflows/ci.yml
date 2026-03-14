@@ -70,6 +70,7 @@ jobs:
         with:
           name: playwright-scheduler-timings
           path: examples/.playwright-scheduler
+          if-no-files-found: warn
 
   examples-shards:
     runs-on: ubuntu-latest
@@ -101,6 +102,7 @@ jobs:
 
       - name: Download timing data
         uses: actions/download-artifact@v4
+        continue-on-error: true
         with:
           name: playwright-scheduler-timings
           path: examples/.playwright-scheduler
