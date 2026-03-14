@@ -30,13 +30,9 @@ jobs:
 
       - run: npm run build
 
-  examples:
+  examples-collect:
     runs-on: ubuntu-latest
     needs: ci
-
-    strategy:
-      matrix:
-        shard: ['1/2', '2/2']
 
     steps:
       - uses: actions/checkout@v4
@@ -62,8 +58,52 @@ jobs:
         uses: actions/cache@v4
         with:
           path: examples/.playwright-scheduler
-          key: playwright-scheduler-${{ github.ref }}-${{ github.run_id }}-${{ matrix.shard }}
+          key: playwright-scheduler-${{ github.ref }}-${{ github.run_id }}
           restore-keys: playwright-scheduler-${{ github.ref }}-
+
+      - name: Collect timing data
+        run: npx playwright test
+        working-directory: examples
+
+      - name: Upload timing data
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-scheduler-timings
+          path: examples/.playwright-scheduler
+
+  examples-shards:
+    runs-on: ubuntu-latest
+    needs: examples-collect
+
+    strategy:
+      matrix:
+        shard: ['1/2', '2/2']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - name: Install example dependencies
+        run: npm ci
+        working-directory: examples
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium --with-deps
+        working-directory: examples
+
+      - name: Download timing data
+        uses: actions/download-artifact@v4
+        with:
+          name: playwright-scheduler-timings
+          path: examples/.playwright-scheduler
 
       - name: Run shard ${{ matrix.shard }}
         run: npx playwright test
